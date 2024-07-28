@@ -1,5 +1,5 @@
 <script lang="ts">
-
+  import { base } from "$app/paths"
   // Fetches the fruits name and description from +page.server.ts
   export let data: {
     topic: string;
@@ -14,7 +14,7 @@
     <div class="flex justify-between">
       <a
         class="text-green-500 hover:text-green-700"
-        href="/"
+        href="{base}/"
       >
         Home
       </a>

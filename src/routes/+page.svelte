@@ -15,7 +15,7 @@
 
     // Checks to see if form is empty upon submission
     if (topic.trim() === '') {
-      help = 'Form is empty. Please enter a fruit. (hint: enter "Apple")';
+      help = 'The form is empty. Please enter a fruit. (hint: enter "Apple")';
       return;
     }
 
