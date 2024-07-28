@@ -17,7 +17,7 @@
     <div class="flex justify-between">
       <a
         class="text-green-500 hover:text-green-700"
-        href="/"
+        href="{base}/"
       >
         Home
       </a>
