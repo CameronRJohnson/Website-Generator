@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { base } from "$app/paths"
+  import { base } from '$app/paths'
   // Fetches the fruits name and description from +page.server.ts
   export let data: {
     topic: string;
     description: string;
+    
   };
+
+
 </script>
 
 <main class="flex items-center justify-center min-h-screen bg-gray-900">
