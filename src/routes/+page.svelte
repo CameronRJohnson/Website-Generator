@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
   import { supabase } from '../lib/supabaseClient';
   import { goto } from '$app/navigation';
   import type { TopicData } from '../lib/types';
@@ -30,7 +31,7 @@
     } else if (data.length === 0) {
       help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
-      goto(`/${topic}`);
+      goto(`${base}/${topic}`);
     }
   }
 
