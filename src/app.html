@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <!-- Tailwind CSS CDN (if not using a build process) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    %sveltekit.head%
+
+    <style lang="postcss">
+        
+    </style>
+
+
+    
+</head>
+
+<body>
+    <div style="display: contents">%sveltekit.body%</div>
+
+    <script>
+        const theme = new URL(window.location).searchParams.get('theme');
+        document.body.classList.remove('light', 'dark');
+        document.body.classList.add(theme || 'light');
+    </script>
+</body>
+</html>
