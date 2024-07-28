@@ -31,7 +31,7 @@
     } else if (data.length === 0) {
       help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
-      goto(`/${topic}`);
+      goto(`${base}/${topic}`);
     }
   }
 
