@@ -1,29 +1,29 @@
+// src/routes/+page.svelte
 <script lang="ts">
-  import { supabase } from '../lib/supabaseClient';
   import { base } from '$app/paths';
+  import { supabase } from '../lib/supabaseClient';
   import { goto } from '$app/navigation';
-  import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
 
   let topic = '';
   let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
   let showPopup = false;
 
-
   // Search supabase for keyword
   async function searchDatabase() {
-
     // Checks to see if form is empty upon submission
     if (topic.trim() === '') {
       help = 'The form is empty. Please enter a fruit. (hint: enter "Apple")';
       return;
     }
 
-    // Finds the desiered keyword in supabase table
+    // Finds the desired keyword in supabase table
     const { data, error } = await supabase
       .from('Topics')
       .select('Description')
       .eq('Topic', topic);
+
+    console.log('Search result:', { data, error });
 
     if (error) {
       console.error('Error fetching data:', error);
@@ -31,6 +31,7 @@
     } else if (data.length === 0) {
       help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
+      console.log('Navigating to:', `${base}/${topic}`);
       goto(`/${topic}`);
     }
   }
