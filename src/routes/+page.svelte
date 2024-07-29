@@ -28,10 +28,9 @@
       console.error('Error fetching data:', error);
       help = `Error fetching data: ${error.message}`;
     } else if (data.length === 0) {
-      help = 'We could not find this fruit. Try again. (hint: "Apple")';
+      help = 'We could not find this fruit. Try again.';
     } else {
-      console.log('Navigating to:', `${base}/${topic}`);
-      goto(`/${topic}`);
+      goto(`${base}/${topic}`);
     }
   }
 
