@@ -17,7 +17,6 @@ export const load: PageServerLoad = async ({ params }) => {
     if (error || !data) {
       console.error('Error fetching data from Supabase:', error ? error.message : 'No data found');
       return {
-        status: 404,
         error: 'Not found'
       };
     }
