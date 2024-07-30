@@ -1,37 +1,36 @@
 <script lang="ts">
-  import { supabase } from '../lib/supabaseClient';
   import { base } from '$app/paths';
+  import { supabase } from '../lib/supabaseClient';
   import { goto } from '$app/navigation';
-  import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
 
   let topic = '';
   let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
   let showPopup = false;
 
+  // Search supabase for keyword
   async function searchDatabase() {
+    // Checks to see if form is empty upon submission
     if (topic.trim() === '') {
       help = 'The form is empty. Please enter a fruit. (hint: enter "Apple")';
       return;
     }
 
+    // Finds the desired keyword in supabase table
     const { data, error } = await supabase
       .from('Topics')
       .select('Description')
       .eq('Topic', topic);
 
+    console.log('Search result:', { data, error });
+
     if (error) {
       console.error('Error fetching data:', error);
       help = `Error fetching data: ${error.message}`;
     } else if (data.length === 0) {
-      help = 'We could not find this fruit. Try again. (hint: "Apple")';
+      help = 'We could not find this fruit. Try again.';
     } else {
-      try {
-        await goto(`${base}/${topic}`);
-      } catch (navError) {
-        console.error('Navigation error:', navError);
-        help = 'Failed to navigate. Please try again.';
-      }
+      goto(`${base}/${topic}`);
     }
   }
 

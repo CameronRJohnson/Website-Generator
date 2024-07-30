@@ -4,7 +4,6 @@
   export let data: {
     topic: string;
     description: string;
-    
   };
 
 
