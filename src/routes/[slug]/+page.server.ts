@@ -1,4 +1,3 @@
-// src/routes/[slug]/+page.server.ts
 import type { TopicData } from '$lib/types';
 import { supabase } from '$lib/supabaseClient';
 import type { PageServerLoad } from './$types';

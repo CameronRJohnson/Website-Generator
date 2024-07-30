@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { base } from '$app/paths';
   import { supabase } from '../lib/supabaseClient';
   import { goto } from '$app/navigation';
   import Popup from '$lib/Popup.svelte';
@@ -30,7 +29,7 @@
     } else if (data.length === 0) {
       help = 'We could not find this fruit. Try again.';
     } else {
-      goto(`${base}/${topic}`);
+      goto(`/${topic}`);
     }
   }
 
