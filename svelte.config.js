@@ -13,7 +13,7 @@ const config = {
     }),
 
     paths: {
-      base: process.argv.includes('') ? '' : process.env.BASE_PATH
+      base: process.argv.includes() ? '' : process.env.BASE_PATH
     }
   }
 };
