@@ -29,7 +29,7 @@
     } else if (data.length === 0) {
       help = 'We could not find this fruit. Try again.';
     } else {
-      goto(`/${topic}`);
+      goto(`/test`);
     }
   }
 
