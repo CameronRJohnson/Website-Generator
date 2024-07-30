@@ -1,5 +1,5 @@
 import type { TopicData } from '$lib/types';
-import { supabase } from '$lib/supabaseClient';
+import { supabase } from '../../supabaseClient';
 import type { PageServerLoad } from './$types';
 export const prerender = false;
 
