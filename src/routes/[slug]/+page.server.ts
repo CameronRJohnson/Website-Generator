@@ -1,6 +1,5 @@
-import type { TopicData } from '$lib/types';
-import { supabase } from '$lib/supabaseClient';
 import type { PageServerLoad } from './$types';
+import { supabase } from '$lib/supabaseClient';
 
 export const load: PageServerLoad = async ({ params }) => {
   const { slug } = params;
@@ -13,24 +12,36 @@ export const load: PageServerLoad = async ({ params }) => {
       .eq('Topic', slug)
       .single();
 
-    if (error || !data) {
-      console.error('Error fetching data from Supabase:', error ? error.message : 'No data found');
+    if (error) {
+      console.error('Error fetching data from Supabase:', error.message);
       return {
-        error: 'Not found'
+        status: 404,
+        error: new Error('Not found')
+      };
+    }
+
+    if (!data) {
+      console.error('No data found');
+      return {
+        status: 404,
+        error: new Error('Not found')
       };
     }
 
     console.log('Data fetched successfully:', data);
 
     return {
-      topic: data.Topic,
-      description: data.Description
+      status: 200,
+      props: {
+        topic: data.Topic,
+        description: data.Description
+      }
     };
   } catch (err) {
     console.error('Unexpected error:', err);
     return {
       status: 500,
-      error: 'Internal Server Error'
+      error: new Error('Internal Server Error')
     };
   }
 };
