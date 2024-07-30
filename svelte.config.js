@@ -9,13 +9,14 @@ const config = {
   }),
   kit: {
     adapter: adapter({
-      fallback: '404.html'
+      pages: 'build',
+      assets: 'build',
+      fallback: 'index.html', // Enable fallback
     }),
-
     paths: {
-      base: process.argv.includes() ? '' : process.env.BASE_PATH
-    }
-  }
+      base: '/Website-Generator', // Ensure this matches your GitHub Pages repository name
+    },
+  },
 };
 
 export default config;
