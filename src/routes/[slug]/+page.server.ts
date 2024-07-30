@@ -1,7 +1,6 @@
-import type { TopicData } from '$lib/types';
 import { supabase } from '../../supabaseClient';
 import type { PageServerLoad } from './$types';
-export const prerender = false;
+export const prerender = 'auto';
 
 export const load: PageServerLoad = async ({ params }) => {
   const { slug } = params;
