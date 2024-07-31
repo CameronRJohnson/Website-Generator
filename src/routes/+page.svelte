@@ -30,7 +30,7 @@
       help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
       // Construct the URL
-      url = `${base}/${topic}`;
+      url = `/${topic}`;
     }
   }
 
