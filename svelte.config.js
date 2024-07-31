@@ -1,22 +1,19 @@
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static';
 import sveltePreprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: [
-    sveltePreprocess({
-      postcss: true
-    }),
-    vitePreprocess()
-  ],
+  preprocess: sveltePreprocess({
+    postcss: true
+  }),
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      fallback: '404.html'
+    }),
+
     paths: {
-      base: process.env.NODE_ENV === 'development' ? '' : process.env.BASE_PATH || ''
-    },
-    prerender: {
-      entries: []
+      base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
     }
   }
 };
