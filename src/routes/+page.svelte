@@ -71,7 +71,7 @@
     </div>
     {#if url}
       <div class="mt-4">
-        <a class="text-green-500 hover:text-green-700" href="{url}">
+        <a class="text-green-500 hover:text-green-700" href="{base}/{url}">
           Go to {topic}
         </a>
       </div>
