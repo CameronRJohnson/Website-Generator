@@ -1,12 +1,13 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import { supabase } from '../supabaseClient';
-  import { goto } from '$app/navigation';
+  import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
+	import { supabase } from '../supabaseClient';
 
   let topic = '';
   let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
   let showPopup = false;
+  let url = '';
 
   // Search supabase for keyword
   async function searchDatabase() {
@@ -22,15 +23,14 @@
       .select('Description')
       .eq('Topic', topic);
 
-    console.log('Search result:', { data, error });
-
     if (error) {
       console.error('Error fetching data:', error);
       help = `Error fetching data: ${error.message}`;
     } else if (data.length === 0) {
-      help = 'We could not find this fruit. Try again.';
+      help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
-      goto(`${base}/${topic}`);
+      // Construct the URL
+      url = `${base}/${topic}`;
     }
   }
 
@@ -44,7 +44,7 @@
 </script>
 
 <main class="flex items-center justify-center min-h-screen bg-gray-900">
-  <form class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative">
+  <form class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative" on:submit|preventDefault={searchDatabase}>
     <h2 class="text-2xl font-bold mb-6 text-center text-white">Website Spliter Demo</h2>
     <div class="mb-4">
       <label class="block text-white text-sm font-bold mb-2" for="topic">
@@ -61,8 +61,7 @@
     <div class="flex items-center justify-between">
       <button
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        type="button"
-        on:click={searchDatabase}
+        type="submit"
       >
         Search Database
       </button>
@@ -70,6 +69,13 @@
     <div class="mt-4">
       <pre class="text-white whitespace-pre-wrap">{help}</pre>
     </div>
+    {#if url}
+      <div class="mt-4">
+        <a class="text-green-500 hover:text-green-700" href="{url}">
+          Go to {topic}
+        </a>
+      </div>
+    {/if}
     <div class="absolute bottom-3 right-3 text-white">
       <button 
         type="button"
