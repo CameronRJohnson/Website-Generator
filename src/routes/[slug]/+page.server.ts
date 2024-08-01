@@ -1,6 +1,7 @@
 import { supabase } from '../../supabaseClient';
 import type { PageServerLoad } from './$types';
-export const prerender = 'auto';
+
+export const prerender = false; // Disable prerendering
 
 export const load: PageServerLoad = async ({ params }) => {
   const { slug } = params;
@@ -16,6 +17,7 @@ export const load: PageServerLoad = async ({ params }) => {
     if (error || !data) {
       console.error('Error fetching data from Supabase:', error ? error.message : 'No data found');
       return {
+        status: 404,
         error: 'Not found'
       };
     }
