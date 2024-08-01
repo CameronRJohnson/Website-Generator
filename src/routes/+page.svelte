@@ -1,36 +1,30 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import type { TopicData } from '../lib/types';
+  import type { TopicData } from '$lib/types';
   import Popup from '$lib/Popup.svelte';
-  import { supabase } from '$lib/supabaseClient';
+
+  export let data: {
+    topics: TopicData[];
+  };
 
   let topic = '';
-  let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
+  let help = 'Try entering a topic into the search bar to navigate.';
+  let filteredTopics: TopicData[] = [];
   let showPopup = false;
-  let url = '';
 
-  // Search supabase for keyword
-  async function searchDatabase() {
-    // Checks to see if form is empty upon submission
+  function searchTopics() {
     if (topic.trim() === '') {
-      help = 'The form is empty. Please enter a fruit. (hint: enter "Apple")';
+      help = 'The form is empty. Please enter a topic.';
+      filteredTopics = [];
       return;
     }
 
-    // Finds the desired keyword in supabase table
-    const { data, error } = await supabase
-      .from('Topics')
-      .select('Description')
-      .eq('Topic', topic);
+    filteredTopics = data.topics.filter(t => t.Topic.toLowerCase().includes(topic.toLowerCase()));
 
-    if (error) {
-      console.error('Error fetching data:', error);
-      help = `Error fetching data: ${error.message}`;
-    } else if (data.length === 0) {
-      help = 'We could not find this fruit. Try again. (hint: "Apple")';
+    if (filteredTopics.length === 0) {
+      help = 'We could not find this topic. Try again.';
     } else {
-      // Construct the URL
-      url = `${base}/${topic}`;
+      help = '';
     }
   }
 
@@ -44,38 +38,45 @@
 </script>
 
 <main class="flex items-center justify-center min-h-screen bg-gray-900">
-  <form class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative" on:submit|preventDefault={searchDatabase}>
+  <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative">
     <h2 class="text-2xl font-bold mb-6 text-center text-white">Website Spliter Demo</h2>
     <div class="mb-4">
       <label class="block text-white text-sm font-bold mb-2" for="topic">
-        Desired Fruit
+        Desired Topic
       </label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
         id="topic"
         type="text"
         bind:value={topic}
-        placeholder="Enter fruit"
+        placeholder="Enter topic"
       />
     </div>
     <div class="flex items-center justify-between">
       <button
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        type="submit"
+        type="button"
+        on:click={searchTopics}
       >
-        Search Database
+        Search Topics
       </button>
     </div>
     <div class="mt-4">
-      <pre class="text-white whitespace-pre-wrap">{help}</pre>
+      {#if help}
+        <pre class="text-white whitespace-pre-wrap">{help}</pre>
+      {/if}
+      {#if filteredTopics.length > 0}
+        <ul class="text-white">
+          {#each filteredTopics as topic}
+            <li>
+              <a class="text-green-500 hover:text-green-700" href={`${base}/${topic.Topic}`}>
+                {topic.Topic}
+              </a>
+            </li>
+          {/each}
+        </ul>
+      {/if}
     </div>
-    {#if url}
-      <div class="mt-4">
-        <a class="text-green-500 hover:text-green-700" href="{url}">
-          Go to {topic}
-        </a>
-      </div>
-    {/if}
     <div class="absolute bottom-3 right-3 text-white">
       <button 
         type="button"
@@ -85,8 +86,8 @@
         About
       </button> 
       | 
-      <a href="https://github.com/CameronRJohnson" target="_blank">Github</a>
+      <a href="https://github.com/CameronRJohnson" target="_blank">GitHub</a>
     </div>
     <Popup {showPopup} closePopup={closePopup} />
-  </form>
+  </div>
 </main>
