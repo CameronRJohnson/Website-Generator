@@ -2,7 +2,7 @@
   import { base } from '$app/paths';
   import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
-	import { supabase } from '$lib/supabaseClient';
+  import { supabase } from '$lib/supabaseClient';
 
   let topic = '';
   let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
@@ -30,7 +30,7 @@
       help = 'We could not find this fruit. Try again. (hint: "Apple")';
     } else {
       // Construct the URL
-      url = `${topic}`;
+      url = `${base}/${topic}`;
     }
   }
 
@@ -71,7 +71,7 @@
     </div>
     {#if url}
       <div class="mt-4">
-        <a class="text-green-500 hover:text-green-700" href="{base}/{url}">
+        <a class="text-green-500 hover:text-green-700" href="{url}">
           Go to {topic}
         </a>
       </div>
