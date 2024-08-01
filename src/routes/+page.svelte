@@ -1,32 +1,43 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import type { TopicData } from '$lib/types';
+  import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
-
-  export let data: {
-    topics: TopicData[];
-  };
+  import { supabase } from '$lib/supabaseClient';
 
   let topic = '';
-  let help = 'Try entering a topic into the search bar to navigate.';
+  let help = 'Try entering "Apple" into the search bar to navigate to a different page.';
   let showPopup = false;
   let filteredTopics: TopicData[] = [];
+  let url = '';
 
-  function searchTopics() {
-    if (topic.trim() === '') {
-      help = 'The form is empty. Please enter a topic.';
-      filteredTopics = [];
-      return;
-    }
+  async function searchDatabase() {
+  if (topic.trim() === '') {
+    help = 'The form is empty. Please enter a topic.';
+    return;
+  }
 
-    filteredTopics = data.topics.filter(t => t.Topic.toLowerCase().includes(topic.toLowerCase()));
+  try {
+    const { data, error } = await supabase
+      .from('Topics')
+      .select('Topic, Description')  // Ensure both fields are selected
+      .eq('Topic', topic);
 
-    if (filteredTopics.length === 0) {
+    if (error) {
+      console.error('Error fetching data:', error);
+      help = `Error fetching data: ${error.message}`;
+    } else if (!data || data.length === 0) {
       help = 'We could not find this topic. Try again.';
     } else {
+      filteredTopics = data as TopicData[];  // Cast to TopicData[]
+      url = `${base}/${topic}`;
       help = '';
     }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    help = `Unexpected error: ${err}`;
   }
+}
+
 
   function openPopup() {
     showPopup = true;
@@ -38,8 +49,8 @@
 </script>
 
 <main class="flex items-center justify-center min-h-screen bg-gray-900">
-  <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative">
-    <h2 class="text-2xl font-bold mb-6 text-center text-white">Website Spliter Demo</h2>
+  <form class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm relative" on:submit|preventDefault={searchDatabase}>
+    <h2 class="text-2xl font-bold mb-6 text-center text-white">Website Splitter Demo</h2>
     <div class="mb-4">
       <label class="block text-white text-sm font-bold mb-2" for="topic">
         Desired Topic
@@ -55,28 +66,21 @@
     <div class="flex items-center justify-between">
       <button
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        type="button"
-        on:click={searchTopics}
+        type="submit"
       >
-        Search Topics
+        Search Database
       </button>
     </div>
     <div class="mt-4">
-      {#if help}
-        <pre class="text-white whitespace-pre-wrap">{help}</pre>
-      {/if}
-      {#if filteredTopics.length > 0}
-        <ul class="text-white">
-          {#each filteredTopics as topic}
-            <li>
-              <a class="text-green-500 hover:text-green-700" href={`${base}/${topic.Topic}`}>
-                {topic.Topic}
-              </a>
-            </li>
-          {/each}
-        </ul>
-      {/if}
+      <pre class="text-white whitespace-pre-wrap">{help}</pre>
     </div>
+    {#if url}
+      <div class="mt-4">
+        <a class="text-green-500 hover:text-green-700" href={url}>
+          Go to {topic}
+        </a>
+      </div>
+    {/if}
     <div class="absolute bottom-3 right-3 text-white">
       <button 
         type="button"
@@ -89,5 +93,5 @@
       <a href="https://github.com/CameronRJohnson" target="_blank">GitHub</a>
     </div>
     <Popup {showPopup} closePopup={closePopup} />
-  </div>
+  </form>
 </main>
