@@ -14,7 +14,12 @@ const config = {
 
     paths: {
       base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+    },
+    
+    prerender: {
+      entries: ['*', '/apple', '/banana', '/cherry']  // Add all the possible routes here
     }
+
   }
 };
 

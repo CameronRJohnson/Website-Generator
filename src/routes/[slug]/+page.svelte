@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { base } from '$app/paths'
-  // Fetches the fruits name and description from +page.server.ts
+  import { base } from '$app/paths';
   export let data: {
     topic: string;
     description: string;
   };
-
-
 </script>
 
 <main class="flex items-center justify-center min-h-screen bg-gray-900">
@@ -14,12 +11,7 @@
     <h2 class="text-2xl font-bold mb-6 text-center text-white">{data.topic}</h2>
     <p class="text-white whitespace-pre-wrap mb-4">{data.description}</p>
     <div class="flex justify-between">
-      <a
-        class="text-green-500 hover:text-green-700"
-        href="{base}/"
-      >
-        Home
-      </a>
+      <a class="text-green-500 hover:text-green-700" href="{base}/">Home</a>
     </div>
   </div>
 </main>

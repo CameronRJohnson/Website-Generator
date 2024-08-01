@@ -5,17 +5,24 @@ import type { TopicData } from '$lib/types';
 export const load: PageServerLoad = async () => {
   try {
     const { data, error } = await supabase.from('Topics').select('Topic, Description');
-    if (error) {
-      console.error('Error fetching data from Supabase:', error.message);
-      return { topics: [] };
+
+    if (error || !data) {
+      console.error('Error fetching data from Supabase:', error ? error.message : 'No data found');
+      return {
+        error: 'Not found'
+      };
     }
-    if (!data) {
-      console.error('No data returned from Supabase');
-      return { topics: [] };
-    }
-    return { topics: data as TopicData[] };
+
+    console.log('Data fetched successfully:', data);
+
+    return {
+      topics: data
+    };
   } catch (err) {
     console.error('Unexpected error:', err);
-    return { topics: [] };
+    return {
+      status: 500,
+      error: 'Internal Server Error'
+    };
   }
 };

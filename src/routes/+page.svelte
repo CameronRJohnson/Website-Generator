@@ -9,8 +9,8 @@
 
   let topic = '';
   let help = 'Try entering a topic into the search bar to navigate.';
-  let filteredTopics: TopicData[] = [];
   let showPopup = false;
+  let filteredTopics: TopicData[] = [];
 
   function searchTopics() {
     if (topic.trim() === '') {
