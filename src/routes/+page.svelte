@@ -2,7 +2,7 @@
   import { base } from '$app/paths';
   import type { TopicData } from '../lib/types';
   import Popup from '$lib/Popup.svelte';
-	import { supabase } from '../supabaseClient';
+	import { supabase } from '$lib/supabaseClient';
 
   let topic = '';
   let help = 'Try entering "Apple" into the search bar to navigate to a different page.';

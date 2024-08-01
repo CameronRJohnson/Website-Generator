@@ -1,38 +1,28 @@
-import { supabase } from '../../supabaseClient';
+// src/routes/+page.server.ts
 import type { PageServerLoad } from './$types';
+import { supabase } from '$lib/supabaseClient';
+import type { TopicData } from '$lib/types';
 
-export const prerender = false; // Disable prerendering
-
-export const load: PageServerLoad = async ({ params }) => {
-  const { slug } = params;
-  console.log('Fetching data for slug:', slug);
+export const load: PageServerLoad = async () => {
+  console.log('Fetching topics data from Supabase...');
 
   try {
-    const { data, error } = await supabase
-      .from('Topics')
-      .select('Topic, Description')
-      .eq('Topic', slug)
-      .single();
+    const { data, error } = await supabase.from('Topics').select('Topic, Description');
 
-    if (error || !data) {
-      console.error('Error fetching data from Supabase:', error ? error.message : 'No data found');
-      return {
-        status: 404,
-        error: 'Not found'
-      };
+    if (error) {
+      console.error('Error fetching data from Supabase:', error.message);
+      return { topics: [] };
     }
 
-    console.log('Data fetched successfully:', data);
+    if (!data) {
+      console.error('No data returned from Supabase');
+      return { topics: [] };
+    }
 
-    return {
-      topic: data.Topic,
-      description: data.Description
-    };
+    console.log('Topics data fetched successfully:', data);
+    return { topics: data as TopicData[] };
   } catch (err) {
     console.error('Unexpected error:', err);
-    return {
-      status: 500,
-      error: 'Internal Server Error'
-    };
+    return { topics: [] };
   }
 };
